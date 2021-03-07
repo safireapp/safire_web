@@ -21,7 +21,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
-      data: { email, password: hashedPassword, username },
+      data: {
+        email,
+        password: hashedPassword,
+        username,
+        role: "USER",
+        confirmed: false,
+        verified: false,
+      },
     });
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -38,7 +45,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           text: text(url),
           html: html(url),
         };
-        sgMail.send(msg)
+        sgMail
+          .send(msg)
           .then(() => {
             console.log("Email sent");
           })
