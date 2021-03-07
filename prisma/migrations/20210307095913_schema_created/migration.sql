@@ -1,3 +1,5 @@
+CREATE EXTENSION citext;
+
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
 
@@ -7,8 +9,8 @@ CREATE TYPE "NotificationType" AS ENUM ('LIKE', 'COMMENT');
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
+    "email" CITEXT NOT NULL,
+    "username" CITEXT NOT NULL,
     "password" TEXT NOT NULL,
     "firstName" TEXT DEFAULT E'',
     "lastName" TEXT DEFAULT E'',

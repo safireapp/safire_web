@@ -12,8 +12,8 @@ generator client {
 
 model User {
   id         String    @unique @default(uuid())
-  email      String    @unique
-  username   String    @unique
+  email      String    @unique @db.Citext
+  username   String    @unique @db.Citext
   password   String
   firstName  String?   @default("")
   lastName   String?   @default("")
