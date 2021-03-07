@@ -12,66 +12,64 @@ generator client {
 
 model User {
   id         String    @unique @default(uuid())
+  email      String    @unique
+  username   String    @unique
+  password   String
   firstName  String?   @default("")
   lastName   String?   @default("")
   bio        String?   @default("")
   website    String?   @default("")
   location   String?   @default("")
-  imageUrl   String?   @default("") // TODO
+  imageUrl   String?   @default("https://firebasestorage.googleapis.com/v0/b/safire-e142f.appspot.com/o/blankpfp.webp?alt=media") // TODO
   created_at DateTime  @default(now()) @map("created_at")
   role       UserRole? @default(USER)
+  confirmed  Boolean   @default(false)
+  verified   Boolean   @default(false)
 
-  userName String @unique
-  email    String @unique
-
-  posts    Post[]
-  comments Comment[]
-  likes    Like[]
+  posts    Post[]    @relation("post-user")
+  comments Comment[] @relation("comment-user")
+  likes    Like[]    @relation("like-user")
 
   @@map(name: "users")
 }
 
 model Post {
   id           String   @unique @default(uuid())
+  author       User     @relation("post-user", fields: [authorId], references: [id])
+  authorId     String
+  body         String
   created_at   DateTime @default(now()) @map("created_at")
   likeCount    Int      @default(0)
   commentCount Int      @default(0)
 
-  body String
-
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
-
-  comments      Comment[]
-  notifications Notification[]
-  likes         Like[]
+  comments      Comment[]      @relation("comment-post")
+  notifications Notification[] @relation("notification-post")
+  likes         Like[]         @relation("like-post")
 
   @@map(name: "posts")
 }
 
 model Comment {
   id         String   @unique @default(uuid())
+  authorId   String
+  author     User     @relation("comment-user", fields: [authorId], references: [id])
+  postId     String
+  post       Post     @relation("comment-post", fields: [postId], references: [id])
+  body       String
   created_at DateTime @default(now()) @map("created_at")
-
-  author User @relation(fields: [authorId], references: [id])
-  post   Post @relation(fields: [postId], references: [id])
-
-  body     String
-  authorId String
-  postId   String
 
   @@map(name: "comments")
 }
 
 model Notification {
   id         String           @unique @default(uuid())
-  created_at DateTime         @default(now()) @map("created_at")
   recipient  String
   sender     String
-  read       Boolean          @default(false)
   type       NotificationType
+  read       Boolean          @default(false)
+  created_at DateTime         @default(now()) @map("created_at")
 
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation("notification-post", fields: [postId], references: [id])
   postId String
 
   @@map(name: "notifications")
@@ -79,11 +77,10 @@ model Notification {
 
 model Like {
   id     String @unique @default(uuid())
+  post   Post   @relation("like-post", fields: [postId], references: [id])
+  user   User   @relation("like-user", fields: [userId], references: [id])
   postId String
   userId String
-
-  post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id])
 
   @@map(name: "likes")
 }
