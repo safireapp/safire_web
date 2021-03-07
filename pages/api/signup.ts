@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 // import { Session } from "next-iron-session";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
+import { text, html } from "../../lib/email";
 
 const prisma = new PrismaClient();
 
@@ -34,10 +35,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           to: email,
           from: process.env.EMAIL_FROM,
           subject: "Confim Your Email",
-          text: `Confim your email for Safire Please click this link to confirm your email: ${url}`,
-          html: `<h1>Confim your email for Safire<h1>
-          <br />
-          <p>Please click this link to confirm your email: <a href=${url}>${url}</a><p>`,
+          text: text(url),
+          html: html(url),
         };
         sgMail.send(msg)
           .then(() => {
