@@ -12,6 +12,10 @@ const isEmpty = (str: string) => {
   else return false;
 };
 
+const hasWhiteSpace = (str: string) => {
+  return /\s/g.test(str);
+};
+
 export const validateSignupData = (data: SignupData) => {
   let errors: Error = {};
 
@@ -29,6 +33,8 @@ export const validateSignupData = (data: SignupData) => {
     errors.confirmPassword = "Passwords do not match, try again!";
 
   if (isEmpty(data.username)) errors.username = "Username must not be empty";
+  if (hasWhiteSpace(data.username))
+    errors.username = "Username cannot contain a whitespace";
 
   return {
     errors,
