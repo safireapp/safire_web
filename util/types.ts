@@ -39,3 +39,11 @@ export type User = {
   // comments: Comment[];
   // likes: Like[];
 };
+
+export type EditUserDetails = {
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
+  website?: string;
+  location?: string;
+}
