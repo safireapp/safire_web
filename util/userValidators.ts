@@ -1,4 +1,4 @@
-import { Error, LoginData, SignupData, User } from "./types";
+import { EditUserDetails, Error, LoginData, SignupData, User } from "./types";
 
 const isEmail = (email: string) => {
   const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -54,8 +54,8 @@ export const validateLoginData = (data: LoginData) => {
   };
 };
 
-export const reduceUserDetails = (data: User) => {
-  let userDetails: User;
+export const reduceUserDetails = (data: EditUserDetails) => {
+  let userDetails: EditUserDetails = {};
 
   if (!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
   if (!isEmpty(data.website.trim())) {
