@@ -2,6 +2,8 @@ import { NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 
 export type SignupData = {
+  firstName?: string;
+  lastName?: string;
   username: string;
   email: string;
   password: string;
@@ -20,36 +22,13 @@ export type Error = {
   confirmPassword?: string;
 };
 
-export type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  bio: string;
-  website: string;
-  location: string;
-  imageUrl: string;
-  created_at: string;
-  role: string;
-
-  confirmed: boolean;
-  verified: boolean;
-
-  username: string;
-  email: string;
-  password: string;
-
-  // posts: Post[];
-  // comments: Comment[];
-  // likes: Like[];
-};
-
 export type EditUserDetails = {
   firstName?: string;
   lastName?: string;
   bio?: string;
   website?: string;
   location?: string;
-}
+};
 
 export type NextApiRequestWithFormData = NextApiRequest & {
   files: any[];

@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
 import withSession from "@lib/session";
-import { User } from "@utils/types";
 import { reduceUserDetails } from "@utils/userValidators";
 
 const prisma = new PrismaClient();

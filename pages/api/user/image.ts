@@ -6,8 +6,8 @@ import multer from "multer";
 import initMiddleware from "@lib/initMiddleware";
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
 import withSession from "@lib/session";
-import { NextApiRequestWithFormData, User } from "@utils/types";
-import { PrismaClient } from "@prisma/client";
+import { NextApiRequestWithFormData } from "@utils/types";
+import { PrismaClient, User } from "@prisma/client";
 
 const parser = new DatauriParser();
 const prisma = new PrismaClient();

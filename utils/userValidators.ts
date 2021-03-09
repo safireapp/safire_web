@@ -1,4 +1,4 @@
-import { EditUserDetails, Error, LoginData, SignupData, User } from "./types";
+import { EditUserDetails, Error, LoginData, SignupData } from "./types";
 
 const isEmail = (email: string) => {
   const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -64,6 +64,8 @@ export const reduceUserDetails = (data: EditUserDetails) => {
     } else userDetails.website = data.website;
   }
   if (!isEmpty(data.location.trim())) userDetails.location = data.location;
+  if (!isEmpty(data.firstName.trim())) userDetails.firstName = data.firstName;
+  if (!isEmpty(data.lastName.trim())) userDetails.lastName = data.lastName;
 
   return userDetails;
 };
