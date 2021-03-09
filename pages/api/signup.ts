@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { validateSignupData } from "@utils/userValidators";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-// import withSession from "@lib/session";
-// import { Session } from "next-iron-session";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
 import { text, html } from "@lib/email";
@@ -12,8 +10,22 @@ const prisma = new PrismaClient();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { email, password, confirmPassword, username } = req.body;
-    const newUser = { email, password, confirmPassword, username };
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      confirmPassword,
+    } = req.body;
+    const newUser = {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      confirmPassword,
+    };
     const { valid, errors } = validateSignupData(newUser);
 
     if (!valid) return res.status(400).json(errors);
@@ -22,9 +34,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const user = await prisma.user.create({
       data: {
+        firstName,
+        lastName,
+        username,
         email,
         password: hashedPassword,
-        username,
         role: "USER",
         confirmed: false,
         verified: false,
