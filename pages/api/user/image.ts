@@ -1,13 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import path from "path";
-import cloudinary from "../../../lib/cloudinary";
+import cloudinary from "@lib/cloudinary";
 import DatauriParser from "datauri/parser";
 import multer from "multer";
-import initMiddleware from "../../../lib/initMiddleware";
+import initMiddleware from "@lib/initMiddleware";
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
-import withSession from "../../../lib/session";
-import { User } from "../../../util/types";
-import { Session } from "next-iron-session";
+import withSession from "@lib/session";
+import { NextApiRequestWithFormData, User } from "@utils/types";
 import { PrismaClient } from "@prisma/client";
 
 const parser = new DatauriParser();
@@ -22,11 +21,6 @@ const allowed_types = [
   "image/jpg",
   "image/x-png",
 ];
-
-type NextApiRequestWithFormData = NextApiRequest & {
-  files: any[];
-  session: Session;
-};
 
 export default withSession(
   async (req: NextApiRequestWithFormData, res: NextApiResponse) => {

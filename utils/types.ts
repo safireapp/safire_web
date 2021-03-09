@@ -1,3 +1,6 @@
+import { NextApiRequest } from "next";
+import { Session } from "next-iron-session";
+
 export type SignupData = {
   username: string;
   email: string;
@@ -47,3 +50,8 @@ export type EditUserDetails = {
   website?: string;
   location?: string;
 }
+
+export type NextApiRequestWithFormData = NextApiRequest & {
+  files: any[];
+  session: Session;
+};

@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import withSession from "../../lib/session";
+import withSession from "@lib/session";
 import { Session } from "next-iron-session";
-import { validateLoginData } from "../../util/userValidators";
+import { validateLoginData } from "@utils/userValidators";
 
 const prisma = new PrismaClient();
 
