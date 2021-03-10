@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await prisma.user.findUnique({
     where: { username: req.query.username as string },
+    include: { posts: true, comments: true, likes: true },
   });
 
   if (user) return res.json(user);

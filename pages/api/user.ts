@@ -16,17 +16,21 @@ export default withSession(
         // Simply get the user
         return res.json(user);
       case "POST":
-        // Update the user details
-        const userDetails = reduceUserDetails(req.body);
-        const updatedUser = await prisma.user.update({
-          where: { id: user.id },
-          data: userDetails,
-        });
+        try {
+          const userDetails = reduceUserDetails(req.body);
+          const updatedUser = await prisma.user.update({
+            where: { id: user.id },
+            data: userDetails,
+          });
 
-        req.session.set("user", updatedUser);
-        await req.session.save();
+          req.session.set("user", updatedUser);
+          await req.session.save();
 
-        return res.json(updatedUser);
+          return res.json(updatedUser);
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ message: error.message });
+        }
       default:
         res.status(405).end();
         break;

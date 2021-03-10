@@ -42,7 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         role: "USER",
         confirmed: false,
         verified: false,
-      },
+      }
     });
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);

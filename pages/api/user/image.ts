@@ -29,49 +29,58 @@ export default withSession(
         res.status(405).end();
         break;
       case "POST":
-        const user: User = await req.session.get("user");
-        if (!user) return res.json({ message: "You are not logged in" });
+        try {
+          const user: User = await req.session.get("user");
+          if (!user) return res.json({ message: "You are not logged in" });
 
-        await multerAny(req, res);
+          await multerAny(req, res);
 
-        const file = await req.files[0];
-        if (!allowed_types.includes(file.mimetype))
-          return res
-            .status(400)
-            .json({ message: "Unexpected file type uploaded" });
+          const file = await req.files[0];
+          if (!allowed_types.includes(file.mimetype))
+            return res
+              .status(400)
+              .json({ message: "Unexpected file type uploaded" });
 
-        if (file.size > 5242880)
-          return res
-            .status(400)
-            .json({ message: "Image size must not be greater than 5mb" });
+          if (file.size > 5242880)
+            return res
+              .status(400)
+              .json({ message: "Image size must not be greater than 5mb" });
 
-        const file64 = parser.format(
-          path.extname(file.originalname).toString(),
-          file.buffer
-        );
+          const file64 = parser.format(
+            path.extname(file.originalname).toString(),
+            file.buffer
+          );
 
-        await cloudinary(
-          file64.content,
-          {
-            public_id: `${user.username}_profile_img`,
-            overwrite: true,
-            transformation: { quality: "auto:good" },
-            resource_type: "image",
-          },
-          async (error: UploadApiErrorResponse, result: UploadApiResponse) => {
-            if (error) return res.json({ error: error.message });
+          await cloudinary(
+            file64.content,
+            {
+              public_id: `${user.username}_profile_img`,
+              overwrite: true,
+              transformation: { quality: "auto:good" },
+              resource_type: "image",
+            },
+            async (
+              error: UploadApiErrorResponse,
+              result: UploadApiResponse
+            ) => {
+              if (error) return res.json({ error: error.message });
 
-            const updatedUser = await prisma.user.update({
-              where: { id: user.id },
-              data: { imageUrl: result.url },
-            });
+              const updatedUser = await prisma.user.update({
+                where: { id: user.id },
+                data: { imageUrl: result.url },
+              });
 
-            req.session.set("user", updatedUser);
-            await req.session.save();
+              req.session.set("user", updatedUser);
+              await req.session.save();
 
-            return res.json({ result });
-          }
-        );
+              return res.json({ result });
+            }
+          );
+        } catch (err) {
+          console.error(err);
+          return res.status(500).json({ message: err.message });
+        }
+
         break;
       default:
         res.status(405).end();
