@@ -1,6 +1,7 @@
 // Delete API route: If you are the OP
 // Get API route: Anyone can get a post by its id.
 
+import onPostDelete from "@lib/onPostDelete";
 import withSession from "@lib/session";
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -11,9 +12,10 @@ const prisma = new PrismaClient();
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     try {
+      const postId = req.query.postId as string;
       const post = await prisma.post.findUnique({
         where: {
-          id: req.query.postId as string,
+          id: postId,
         },
         include: {
           author: {
@@ -45,9 +47,11 @@ export default withSession(
           if (post.authorId !== user.id)
             return res.status(403).json({ message: "Unauthorized!" });
 
+          await onPostDelete(postId);
+
           await prisma.post.delete({
             where: {
-              id: req.query.postId as string,
+              id: postId,
             },
           });
 
