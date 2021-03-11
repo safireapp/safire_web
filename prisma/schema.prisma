@@ -26,6 +26,7 @@ model User {
   posts    Post[]    @relation("post-user")
   comments Comment[] @relation("comment-user")
   likes    Like[]    @relation("like-user")
+  // notifications    Notification[]    
 
   @@map(name: "users")
 }
@@ -36,8 +37,6 @@ model Post {
   authorId     String
   body         String
   created_at   DateTime @default(now()) @map("created_at")
-  likeCount    Int      @default(0)
-  commentCount Int      @default(0)
 
   comments      Comment[]      @relation("comment-post")
   notifications Notification[] @relation("notification-post")

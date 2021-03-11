@@ -40,10 +40,10 @@ export default withSession(
         case "DELETE":
           const user: User = req.session.get("user");
           if (!user)
-            return res.status(402).json({ message: "You are not logged in!" });
+            return res.status(403).json({ message: "You are not logged in!" });
 
           if (post.authorId !== user.id)
-            return res.status(402).json({ message: "Unauthorized!" });
+            return res.status(403).json({ message: "Unauthorized!" });
 
           await prisma.post.delete({
             where: {
