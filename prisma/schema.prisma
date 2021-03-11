@@ -26,8 +26,6 @@ model User {
   posts    Post[]    @relation("post-user")
   comments Comment[] @relation("comment-user")
   likes    Like[]    @relation("like-user")
-  // notifications    Notification[]    
-
   @@map(name: "users")
 }
 
@@ -39,7 +37,6 @@ model Post {
   created_at   DateTime @default(now()) @map("created_at")
 
   comments      Comment[]      @relation("comment-post")
-  notifications Notification[] @relation("notification-post")
   likes         Like[]         @relation("like-post")
 
   @@map(name: "posts")
@@ -64,8 +61,6 @@ model Notification {
   type       NotificationType
   read       Boolean          @default(false)
   created_at DateTime         @default(now()) @map("created_at")
-
-  post   Post   @relation("notification-post", fields: [postId], references: [id])
   postId String
 
   @@map(name: "notifications")
