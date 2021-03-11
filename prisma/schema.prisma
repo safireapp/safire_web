@@ -30,14 +30,14 @@ model User {
 }
 
 model Post {
-  id           String   @unique @default(uuid())
-  author       User     @relation("post-user", fields: [authorId], references: [id])
-  authorId     String
-  body         String
-  created_at   DateTime @default(now()) @map("created_at")
+  id         String   @unique @default(uuid())
+  author     User     @relation("post-user", fields: [authorId], references: [id])
+  authorId   String
+  body       String
+  created_at DateTime @default(now()) @map("created_at")
 
-  comments      Comment[]      @relation("comment-post")
-  likes         Like[]         @relation("like-post")
+  comments Comment[] @relation("comment-post")
+  likes    Like[]    @relation("like-post")
 
   @@map(name: "posts")
 }
@@ -61,7 +61,8 @@ model Notification {
   type       NotificationType
   read       Boolean          @default(false)
   created_at DateTime         @default(now()) @map("created_at")
-  postId String
+  postId     String
+  commentId  String?
 
   @@map(name: "notifications")
 }
