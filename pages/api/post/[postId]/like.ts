@@ -1,5 +1,6 @@
 // Like / Dislike API route
 
+import createNotificationOnLike from "@lib/notification-handlers/createNotificationOnLike";
 import withSession from "@lib/session";
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -29,6 +30,9 @@ export default withSession(
             userId: user.id,
           },
         });
+
+        await createNotificationOnLike(user.username, postId)
+
         return res.json({ message: "Liked the post" });
       } else {
         await prisma.like.deleteMany({
