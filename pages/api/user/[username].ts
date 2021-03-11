@@ -1,3 +1,5 @@
+// Anyone can get the user details of a particular username
+
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 

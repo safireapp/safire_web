@@ -1,3 +1,5 @@
+// Create a post route
+
 import withSession from "@lib/session";
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -28,8 +30,11 @@ export default withSession(
           });
 
           return res.json(post);
-        } catch (err) {console.error(err); return res.status(500).json({ message: err.message })}
-        
+        } catch (err) {
+          console.error(err);
+          return res.status(500).json({ message: err.message });
+        }
+
       default:
         return res.status(405).end();
     }

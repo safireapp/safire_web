@@ -1,3 +1,5 @@
+// Signup route
+
 import { NextApiRequest, NextApiResponse } from "next";
 import { validateSignupData } from "@utils/userValidators";
 import { PrismaClient } from "@prisma/client";

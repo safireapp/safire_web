@@ -1,3 +1,6 @@
+// GET route: Get the authenticated user details
+// POST route: Edit the profile information of the authenticated user
+
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";

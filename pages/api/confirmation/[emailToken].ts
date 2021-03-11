@@ -1,3 +1,5 @@
+// Email Confirmation API route
+
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
