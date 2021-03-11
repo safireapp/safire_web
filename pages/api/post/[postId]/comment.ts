@@ -1,5 +1,6 @@
 // Create a Comment API route
 
+import createNotificationOnComment from "@lib/notification-handlers/createNotificationOnComment";
 import withSession from "@lib/session";
 import { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -29,6 +30,9 @@ export default withSession(
               body,
             },
           });
+
+          createNotificationOnComment(user.username, postId, comment.id)
+
           return res.json(comment);
         } catch (err) {
           console.error(err);
