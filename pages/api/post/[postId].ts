@@ -45,7 +45,7 @@ export default withSession(
         case "DELETE":
           if (post.authorId !== user.id)
             return res.status(403).json({ message: "Unauthorized!" });
-            
+
           await onPostDelete(postId);
           return res.json({ message: "Post deleted successfully" });
         case "GET":

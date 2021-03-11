@@ -6,6 +6,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
 import withSession from "@lib/session";
 import { reduceUserDetails } from "@utils/userValidators";
+import _ from "lodash";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +22,17 @@ export default withSession(
           where: { id: user.id },
           include: { likes: true, posts: true, comments: true },
         });
+
+        const userWithLessDetails = _.omit(
+          userWithMoreDetails,
+          "likes",
+          "posts",
+          "comments"
+        );
+
+        req.session.set("user", userWithLessDetails);
+        await req.session.save();
+
         return res.json(userWithMoreDetails);
       case "POST":
         try {

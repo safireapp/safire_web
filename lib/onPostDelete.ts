@@ -30,7 +30,7 @@ export default async (postId: string) => {
     },
   });
 
-  const transaction = await prisma.$transaction([
+  await prisma.$transaction([
     deleteLikes,
     deleteNotifs,
     deleteComments,
