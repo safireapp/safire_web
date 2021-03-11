@@ -17,7 +17,11 @@ export default withSession(
     switch (req.method) {
       case "GET":
         // Simply get the user
-        return res.json(user);
+        const userWithMoreDetails = await prisma.user.findUnique({
+          where: { id: user.id },
+          include: { likes: true, posts: true, comments: true },
+        });
+        return res.json(userWithMoreDetails);
       case "POST":
         try {
           const userDetails = reduceUserDetails(req.body);
