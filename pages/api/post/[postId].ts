@@ -12,6 +12,9 @@ const prisma = new PrismaClient();
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     try {
+      const user: User = req.session.get("user");
+      if (!user)
+        return res.status(403).json({ message: "You are not logged in!" });
       const postId = req.query.postId as string;
       const post = await prisma.post.findUnique({
         where: {
@@ -40,21 +43,10 @@ export default withSession(
 
       switch (req.method) {
         case "DELETE":
-          const user: User = req.session.get("user");
-          if (!user)
-            return res.status(403).json({ message: "You are not logged in!" });
-
           if (post.authorId !== user.id)
             return res.status(403).json({ message: "Unauthorized!" });
-
+            
           await onPostDelete(postId);
-
-          await prisma.post.delete({
-            where: {
-              id: postId,
-            },
-          });
-
           return res.json({ message: "Post deleted successfully" });
         case "GET":
           return res.json(post);

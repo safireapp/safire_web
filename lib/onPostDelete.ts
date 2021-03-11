@@ -4,23 +4,36 @@ const prisma = new PrismaClient();
 
 export default async (postId: string) => {
   // delete all the likes related to this post
-  await prisma.like.deleteMany({
+  const deleteLikes = prisma.like.deleteMany({
     where: {
       postId: postId,
     },
   });
 
   // delete all the comments related to this post
-  await prisma.comment.deleteMany({
+  const deleteComments = prisma.comment.deleteMany({
     where: {
       postId: postId,
     },
   });
 
   // delete all the notifications related to this post
-  await prisma.notification.deleteMany({
+  const deleteNotifs = prisma.notification.deleteMany({
     where: {
       postId: postId,
     },
   });
+
+  const deletePost = prisma.post.delete({
+    where: {
+      id: postId,
+    },
+  });
+
+  const transaction = await prisma.$transaction([
+    deleteLikes,
+    deleteNotifs,
+    deleteComments,
+    deletePost,
+  ]);
 };
