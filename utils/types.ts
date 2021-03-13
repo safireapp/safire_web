@@ -20,6 +20,7 @@ export type Error = {
   email?: string;
   password?: string;
   confirmPassword?: string;
+  message?: string;
 };
 
 export type EditUserDetails = {

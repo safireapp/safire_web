@@ -1,3 +1,4 @@
+import { User } from ".prisma/client";
 import { EditUserDetails, Error, LoginData, SignupData } from "./types";
 
 const isEmail = (email: string) => {
@@ -69,4 +70,29 @@ export const reduceUserDetails = (data: EditUserDetails) => {
   if (!isEmpty(data.lastName.trim())) userDetails.lastName = data.lastName;
 
   return userDetails;
+};
+
+export const validateDM = async (
+  recipientId: string,
+  user: User,
+  checkIfRecipientExists: User
+) => {
+  let errors: Error = {};
+
+  if (!user) {
+    errors.message = "You are not logged in!";
+    return { errors, valid: false };
+  }
+
+  if (recipientId === user.id) {
+    errors.message = "You cannot send a message to yourself";
+    return { errors, valid: false };
+  }
+
+  if (!checkIfRecipientExists) {
+    errors.message = "No such user exists";
+    return { errors, valid: false };
+  }
+
+  return { valid: true };
 };
