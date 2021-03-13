@@ -23,6 +23,11 @@ export default withSession(
           if (!body?.trim())
             return res.status(400).json({ body: "body must not be empty" });
 
+          if (body.length > 150)
+            return res
+              .status(400)
+              .json({ message: "Body must be shorter than 150 characters" });
+
           const comment = await prisma.comment.create({
             data: {
               authorId: user.id,

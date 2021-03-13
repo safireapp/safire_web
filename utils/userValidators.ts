@@ -21,7 +21,7 @@ export const validateSignupData = (data: SignupData) => {
 
   if (isEmpty(data.email)) {
     errors.email = "Email must not be empty";
-  } else if (!isEmail(data.email)) {
+  } else if (!isEmail(data.email) || data.email.length > 50) {
     errors.email = "Must be a valid email address";
   }
 
@@ -35,6 +35,7 @@ export const validateSignupData = (data: SignupData) => {
   if (isEmpty(data.username)) errors.username = "Username must not be empty";
   if (hasWhiteSpace(data.username))
     errors.username = "Username cannot contain a whitespace";
+  if (data.username.length > 20) errors.username = "Username is too long";
 
   return {
     errors,

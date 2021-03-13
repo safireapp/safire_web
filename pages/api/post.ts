@@ -19,7 +19,12 @@ export default withSession(
           const { body } = req.body;
 
           if (!body?.trim())
-            return res.status(400).json({ body: "body must not be empty" });
+            return res.status(400).json({ message: "body must not be empty" });
+
+          if (body.length > 150)
+            return res
+              .status(400)
+              .json({ message: "Body must be shorter than 150 characters" });
 
           // include comments and likes if needed
           const post = await prisma.post.create({

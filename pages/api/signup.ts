@@ -34,22 +34,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        firstName,
-        lastName,
-        username,
-        email,
-        password: hashedPassword,
-        role: "USER",
-        confirmed: false,
-        verified: false,
-      }
-    });
-
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     jwt.sign(
-      user,
+      { firstName, lastName, username, email },
       process.env.EMAIL_SECRET,
       { expiresIn: "1d" },
       (err, emailToken) => {
@@ -68,9 +55,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           })
           .catch((error) => {
             console.error(error);
+            return res.status(500).json({ message: err.message });
           });
       }
     );
+
+    await prisma.user.create({
+      data: {
+        firstName,
+        lastName,
+        username,
+        email,
+        password: hashedPassword,
+        role: "USER",
+        confirmed: false,
+        verified: false,
+      },
+    });
 
     return res.json({ message: "Signup success. Please confirm your email." });
   } catch (error) {
