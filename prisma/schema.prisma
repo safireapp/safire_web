@@ -26,6 +26,8 @@ model User {
   posts    Post[]    @relation("post-user")
   comments Comment[] @relation("comment-user")
   likes    Like[]    @relation("like-user")
+  messages Message[] @relation("message-user")
+
   @@map(name: "users")
 }
 
@@ -61,7 +63,7 @@ model Notification {
   type       NotificationType
   read       Boolean          @default(false)
   created_at DateTime         @default(now()) @map("created_at")
-  postId     String
+  postId     String?
   commentId  String?
 
   @@map(name: "notifications")
@@ -77,6 +79,18 @@ model Like {
   @@map(name: "likes")
 }
 
+model Message {
+  id         String   @unique @default(uuid())
+  created_at DateTime @default(now()) @map("created_at")
+  recipientId  String
+  senderId    String
+  sender     User     @relation("message-user", fields: [senderId], references: [id])
+  message    String
+  read       Boolean  @default(false)
+
+  @@map(name: "messages")
+}
+
 enum UserRole {
   USER
   ADMIN
@@ -85,4 +99,5 @@ enum UserRole {
 enum NotificationType {
   LIKE
   COMMENT
+  NEW_DM
 }
