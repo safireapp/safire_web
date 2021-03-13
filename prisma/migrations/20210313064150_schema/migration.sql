@@ -1,5 +1,4 @@
 CREATE EXTENSION citext;
-
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
 
@@ -29,9 +28,7 @@ CREATE TABLE "posts" (
     "id" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "body" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "likeCount" INTEGER NOT NULL DEFAULT 0,
-    "commentCount" INTEGER NOT NULL DEFAULT 0
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -51,7 +48,8 @@ CREATE TABLE "notifications" (
     "type" "NotificationType" NOT NULL,
     "read" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "postId" TEXT NOT NULL
+    "postId" TEXT NOT NULL,
+    "commentId" TEXT
 );
 
 -- CreateTable
@@ -90,9 +88,6 @@ ALTER TABLE "comments" ADD FOREIGN KEY ("authorId") REFERENCES "users"("id") ON 
 
 -- AddForeignKey
 ALTER TABLE "comments" ADD FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "notifications" ADD FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "likes" ADD FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
