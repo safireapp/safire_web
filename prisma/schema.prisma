@@ -18,10 +18,12 @@ model User {
   website    String?   @default("")
   location   String?   @default("")
   imageUrl   String?   @default("https://firebasestorage.googleapis.com/v0/b/safire-e142f.appspot.com/o/blankpfp.webp?alt=media") // TODO
+  bannerImg  String?   @default("https://bit.ly/3tk0bbr")
   created_at DateTime  @default(now()) @map("created_at")
   role       UserRole? @default(USER)
   confirmed  Boolean   @default(false)
   verified   Boolean   @default(false)
+  following  String[]
 
   posts    Post[]    @relation("post-user")
   comments Comment[] @relation("comment-user")
@@ -52,6 +54,7 @@ model Comment {
   post       Post     @relation("comment-post", fields: [postId], references: [id])
   body       String
   created_at DateTime @default(now()) @map("created_at")
+  likes      Like[]   @relation("like-comment")
 
   @@map(name: "comments")
 }
@@ -70,23 +73,25 @@ model Notification {
 }
 
 model Like {
-  id     String @unique @default(uuid())
-  post   Post   @relation("like-post", fields: [postId], references: [id])
-  user   User   @relation("like-user", fields: [userId], references: [id])
-  postId String
-  userId String
+  id        String   @unique @default(uuid())
+  post      Post?    @relation("like-post", fields: [postId], references: [id])
+  user      User     @relation("like-user", fields: [userId], references: [id])
+  postId    String?
+  comment   Comment? @relation("like-comment", fields: [commentId], references: [id])
+  commentId String?
+  userId    String
 
   @@map(name: "likes")
 }
 
 model Message {
-  id         String   @unique @default(uuid())
-  created_at DateTime @default(now()) @map("created_at")
-  recipientId  String
+  id          String   @unique @default(uuid())
+  created_at  DateTime @default(now()) @map("created_at")
+  recipientId String
   senderId    String
-  sender     User     @relation("message-user", fields: [senderId], references: [id])
-  message    String
-  read       Boolean  @default(false)
+  sender      User     @relation("message-user", fields: [senderId], references: [id])
+  message     String
+  read        Boolean  @default(false)
 
   @@map(name: "messages")
 }
@@ -100,4 +105,5 @@ enum NotificationType {
   LIKE
   COMMENT
   NEW_DM
+  FOLLOW
 }
