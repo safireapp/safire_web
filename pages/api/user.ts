@@ -29,7 +29,7 @@ export default withSession(
           "posts",
           "comments"
         );
-
+        // TODO: exclude the password and following list
         req.session.set("user", userWithLessDetails);
         await req.session.save();
 
@@ -41,7 +41,7 @@ export default withSession(
             where: { id: user.id },
             data: userDetails,
           });
-
+          // TODO: exclude the password and following list
           req.session.set("user", updatedUser);
           await req.session.save();
 

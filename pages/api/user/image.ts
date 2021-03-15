@@ -66,12 +66,12 @@ export default withSession(
               result: UploadApiResponse
             ) => {
               if (error) return res.json({ error: error.message });
-
               const updatedUser = await prisma.user.update({
                 where: { id: user.id },
                 data: { imageUrl: result.url },
               });
 
+              // TODO: exclude the password and following list
               req.session.set("user", updatedUser);
               await req.session.save();
 

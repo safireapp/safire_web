@@ -30,7 +30,7 @@ export default withSession(
       if (!passwordIsValid) {
         return res.status(403).json({ password: "Password is incorrect" });
       }
-
+      // TODO: exclude the password and following list
       req.session.set("user", user);
       await req.session.save();
 

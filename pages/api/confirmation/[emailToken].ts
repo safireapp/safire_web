@@ -18,6 +18,7 @@ export default withSession(
         data: { confirmed: true },
       });
 
+      // TODO: exclude the password and following list
       req.session.set("user", user);
       await req.session.save();
     } catch (e) {
