@@ -1,13 +1,15 @@
 import React from "react";
 import Head from "next/head";
-import styles from "@styles/Home.module.css";
+import { useAuth } from "context/useAuth";
 
 const Home: React.FC = () => {
+  const { user } = useAuth();
+  // console.log(user)
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Safire</title>
       </Head>
     </div>
   );
