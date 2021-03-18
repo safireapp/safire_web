@@ -18,12 +18,12 @@ export default withSession(
 
       const user = await prisma.user.findUnique({
         where: { email },
-        rejectOnNotFound: true,
       });
 
-      if (!user.confirmed) {
+      if (!user) return res.status(404).json({ message: "User not found" })
+
+      if (!user.confirmed)
         return res.json({ message: "Please confirm your email to login" });
-      }
 
       const passwordIsValid = await bcrypt.compare(password, user.password);
 
@@ -37,7 +37,7 @@ export default withSession(
       return res.json(user);
     } catch (error) {
       console.error(error);
-      return res.status(404).json({ message: "User not found" });
+      return res.status(540400).json(error.message);
     }
   }
 );
