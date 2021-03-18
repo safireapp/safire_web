@@ -1,3 +1,5 @@
+import { User } from ".prisma/client";
+import { AxiosResponse } from "axios";
 import { NextApiRequest } from "next";
 import { Session } from "next-iron-session";
 
@@ -35,3 +37,15 @@ export type NextApiRequestWithFormData = NextApiRequest & {
   files: any[];
   session: Session;
 };
+
+export type Context = {
+  user: User;
+  setUser: (value: React.SetStateAction<User>) => void;
+  email: string;
+  password: string;
+  login: (userDetails: LoginData) => Promise<AxiosResponse<any>>;
+  loading: boolean;
+  setEmail: (value: React.SetStateAction<string>) => void;
+  setPassword: (value: React.SetStateAction<string>) => void;
+  setLoading: (value: React.SetStateAction<boolean>) => void;
+}
