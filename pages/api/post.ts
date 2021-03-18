@@ -1,11 +1,11 @@
 // Create a post route
 
+import checkForMention from "@lib/checkForMention";
 import withSession from "@lib/session";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import prisma from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
-
-const prisma = new PrismaClient();
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
@@ -33,6 +33,8 @@ export default withSession(
               authorId: user.id,
             },
           });
+
+          checkForMention(post)
 
           return res.json(post);
         } catch (err) {

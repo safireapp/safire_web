@@ -3,11 +3,10 @@
 import createNotificationOnFollow from "@lib/notification-handlers/createNotificationOnFollow";
 import deleteNotificationOnUnfollow from "@lib/notification-handlers/deleteNotificationOnUnfollow";
 import withSession from "@lib/session";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {

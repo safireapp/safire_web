@@ -1,8 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@lib/prisma";
 
-const prisma = new PrismaClient();
-
-export default async (username: string, postId: string|null, commentId: string|null) => {
+export default async (
+  username: string,
+  postId: string | null,
+  commentId: string | null
+) => {
   if (postId) {
     const post = await prisma.post.findUnique({
       where: {

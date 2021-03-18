@@ -9,10 +9,10 @@ import initMiddleware from "@lib/initMiddleware";
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
 import withSession from "@lib/session";
 import { NextApiRequestWithFormData } from "@utils/types";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import prisma from "@lib/prisma";
 
 const parser = new DatauriParser();
-const prisma = new PrismaClient();
 const upload = multer();
 
 const multerAny = initMiddleware(upload.any());

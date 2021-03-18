@@ -1,12 +1,10 @@
 // Mark the notifications as read
 
 import withSession from "@lib/session";
-import { PrismaClient, User } from "@prisma/client";
-// import authCheck from "@utils/authCheck";
+import prisma from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
-
-const prisma = new PrismaClient();
+import { User } from ".prisma/client";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {

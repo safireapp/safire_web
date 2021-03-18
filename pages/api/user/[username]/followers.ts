@@ -1,11 +1,9 @@
 // Get a list of followers of a user
 
 import withSession from "@lib/session";
-import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {

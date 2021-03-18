@@ -1,9 +1,6 @@
 // Anyone can get the user details of a particular username
-
-import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await prisma.user.findUnique({

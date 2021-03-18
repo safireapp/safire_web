@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default async (username: string, postId: string, commentId: string) => {
   const post = await prisma.post.findUnique({

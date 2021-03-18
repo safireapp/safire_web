@@ -2,13 +2,11 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { validateSignupData } from "@utils/userValidators";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
 import { text, html } from "@lib/email";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {

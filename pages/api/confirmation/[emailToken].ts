@@ -1,12 +1,11 @@
 // Email Confirmation API route
 
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { Session } from "next-iron-session";
 import withSession from "@lib/session";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {

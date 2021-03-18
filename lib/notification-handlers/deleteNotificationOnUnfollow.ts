@@ -1,13 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default async (recipient: string, sender: string) => {
   await prisma.notification.deleteMany({
     where: {
       sender,
       recipient,
-      type: "FOLLOW"
-    }
-  })
+      type: "FOLLOW",
+    },
+  });
 };

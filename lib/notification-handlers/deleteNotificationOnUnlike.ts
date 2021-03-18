@@ -1,9 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@lib/prisma";
 
-const prisma = new PrismaClient();
-
-export default async (sender: string, postId: string|null, commentId: string|null) => {
-
+export default async (
+  sender: string,
+  postId: string | null,
+  commentId: string | null
+) => {
   if (postId) {
     await prisma.notification.deleteMany({
       where: {

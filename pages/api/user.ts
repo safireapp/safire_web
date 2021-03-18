@@ -1,19 +1,18 @@
 // GET route: Get the authenticated user details
 // POST route: Edit the profile information of the authenticated user
 
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
 import withSession from "@lib/session";
 import { reduceUserDetails } from "@utils/userValidators";
 import _ from "lodash";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     const user: User = await req.session.get("user");
-    if (!user) return res.json({ message: "You are not logged in" });
+    if (!user) return res.status(400).json({ message: "You are not logged in" });
 
     switch (req.method) {
       case "GET":

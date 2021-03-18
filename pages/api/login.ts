@@ -1,13 +1,12 @@
 // Login route
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@lib/prisma";
 import bcrypt from "bcryptjs";
 import withSession from "@lib/session";
 import { Session } from "next-iron-session";
 import { validateLoginData } from "@utils/userValidators";
 
-const prisma = new PrismaClient();
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {

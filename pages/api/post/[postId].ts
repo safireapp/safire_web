@@ -3,11 +3,10 @@
 
 import onPostDelete from "@lib/onPostDelete";
 import withSession from "@lib/session";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-iron-session";
-
-const prisma = new PrismaClient();
+import prisma from "@lib/prisma";
 
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
