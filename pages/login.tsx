@@ -12,15 +12,14 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "context/useAuth";
+import { useAuth, useUser } from "hooks";
 import { Context, Error } from "@utils/types";
 import Head from "next/head";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { useRouter } from "next/router";
+import fetcher from "@lib/fetcher";
 
 const Login: React.FC = () => {
   const {
-    user,
-    setUser,
     email,
     password,
     loading,
@@ -30,26 +29,32 @@ const Login: React.FC = () => {
   }: Context = useAuth();
   const [errors, setErrors] = useState<Error>(null);
   const toast = useToast();
+  const router = useRouter();
+
+  const { mutateUser } = useUser("/", true);
 
   async function handleLogin(e: React.SyntheticEvent) {
     try {
       e.preventDefault();
       setLoading(true);
-      const res: AxiosResponse = await axios.post("/api/login", {
-        email,
-        password,
-      });
-      setUser(res.data);
+      const user = await mutateUser(
+        fetcher("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          data: { email, password }
+        })
+      );
+
       setLoading(false);
       setErrors(null);
       toast({
         title: "Logged in successfully",
-        description: `Welcome back, ${res.data.username}!`,
+        description: `Welcome back, ${user.username}!`,
         status: "success",
-        variant: 'subtle',
+        variant: "subtle",
         duration: 2000,
       });
-      return res.data;
+      router.push("/");
     } catch (err) {
       setLoading(false);
       console.log(err);
