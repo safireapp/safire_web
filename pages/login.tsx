@@ -10,24 +10,19 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { useAuth, useUser } from "hooks";
-import { Context, Error } from "@utils/types";
+import { useUser } from "hooks";
+import { Error } from "@utils/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import fetcher from "@lib/fetcher";
 
 const Login: React.FC = () => {
-  const {
-    email,
-    password,
-    loading,
-    setEmail,
-    setPassword,
-    setLoading,
-  }: Context = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Error>(null);
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
   const toast = useToast();
   const router = useRouter();
 
@@ -41,7 +36,10 @@ const Login: React.FC = () => {
         fetcher("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          data: { email, password }
+          data: {
+            email: email.current.value,
+            password: password.current.value,
+          },
         })
       );
 
@@ -106,10 +104,7 @@ const Login: React.FC = () => {
                   variant="outline"
                   placeholder="Enter your email"
                   type="email"
-                  value={email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setEmail(e.target.value)
-                  }
+                  ref={email}
                   isInvalid={errors?.email ? true : false}
                   errorBorderColor="crimson"
                   required
@@ -120,10 +115,7 @@ const Login: React.FC = () => {
                   variant="outline"
                   type="password"
                   placeholder="Password"
-                  value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setPassword(e.target.value)
-                  }
+                  ref={password}
                   isInvalid={errors?.password ? true : false}
                   errorBorderColor="crimson"
                   required
