@@ -1,9 +1,4 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Alert,
   AlertIcon,
   Box,
@@ -15,44 +10,32 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useUser } from "hooks";
-import { Error } from "@utils/types";
+import { Error, SignupData } from "@utils/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import fetcher from "@lib/fetcher";
+import { useForm } from "react-hook-form";
 
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Error>(null);
-  const username = useRef<HTMLInputElement>(null);
-  const firstname = useRef<HTMLInputElement>(null);
-  const lastname = useRef<HTMLInputElement>(null);
-  const email = useRef<HTMLInputElement>(null);
-  const password = useRef<HTMLInputElement>(null);
-  const confirmPassword = useRef<HTMLInputElement>(null);
+  const { register, handleSubmit } = useForm();
   const toast = useToast();
   const router = useRouter();
 
   const { mutateUser } = useUser("/", true);
 
-  async function handleLogin(e: React.SyntheticEvent) {
+  async function handleSignup(data: SignupData) {
     try {
-      e.preventDefault();
       setLoading(true);
       const user = await mutateUser(
         fetcher("/api/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          data: {
-            firstname: firstname.current.value,
-            lastname: lastname.current.value,
-            username: username.current.value,
-            email: email.current.value,
-            password: password.current.value,
-            confirmPassword: confirmPassword.current.value,
-          },
+          data,
         })
       );
 
@@ -68,9 +51,7 @@ const Signup: React.FC = () => {
       router.push("/");
     } catch (err) {
       setLoading(false);
-      console.log(err);
-      const data = err.response.data;
-      setErrors(data);
+      setErrors(err.response.data);
     }
   }
 
@@ -104,7 +85,7 @@ const Signup: React.FC = () => {
             justifyContent="center"
             flex="1 0 0"
           >
-            <Box as="form" w="80%" onSubmit={handleLogin}>
+            <Box as="form" w="80%" onSubmit={handleSubmit(handleSignup)}>
               <Text fontSize="3xl">Hello there!</Text>
               {errors && (
                 <Alert status="error">
@@ -121,14 +102,16 @@ const Signup: React.FC = () => {
                   <Input
                     variant="outline"
                     placeholder="First name"
-                    ref={firstname}
+                    ref={register}
+                    name="firstname"
                   />
                 </FormControl>
                 <FormControl id="lastname">
                   <Input
                     variant="outline"
                     placeholder="Last name"
-                    ref={lastname}
+                    ref={register}
+                    name="lastname"
                   />
                 </FormControl>
               </Box>
@@ -137,7 +120,8 @@ const Signup: React.FC = () => {
                   <Input
                     variant="outline"
                     placeholder="Username"
-                    ref={username}
+                    ref={register}
+                    name="username"
                     isInvalid={errors?.username ? true : false}
                     errorBorderColor="crimson"
                     required
@@ -148,7 +132,8 @@ const Signup: React.FC = () => {
                     variant="outline"
                     placeholder="Enter your email"
                     type="email"
-                    ref={email}
+                    ref={register}
+                    name="email"
                     isInvalid={errors?.email ? true : false}
                     errorBorderColor="crimson"
                     required
@@ -160,7 +145,8 @@ const Signup: React.FC = () => {
                   variant="outline"
                   type="password"
                   placeholder="Password"
-                  ref={password}
+                  ref={register}
+                  name="password"
                   isInvalid={errors?.password ? true : false}
                   errorBorderColor="crimson"
                   required
@@ -171,7 +157,8 @@ const Signup: React.FC = () => {
                   variant="outline"
                   type="password"
                   placeholder="Confirm password"
-                  ref={confirmPassword}
+                  ref={register}
+                  name="confirmPassword"
                   isInvalid={errors?.confirmPassword ? true : false}
                   errorBorderColor="crimson"
                   required
