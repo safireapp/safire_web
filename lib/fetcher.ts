@@ -6,13 +6,12 @@ export default async function fetcher(
 ) {
   try {
     const res = await axios(url, { ...options });
-    const data = await res.data;
-
-    if (data) {
-      return data;
+    
+    if (res.data && res.status === 200) {
+      return res.data;
     }
   } catch (error) {
-    error.data = { message: error.response.data.message };
+    console.error(error);
     return {};
   }
 }
