@@ -24,6 +24,8 @@ model User {
   confirmed  Boolean   @default(false)
   verified   Boolean   @default(false)
   following  String[]
+  public_key   String @default("")
+  enc_priv_key String @default("")
 
   posts    Post[]    @relation("post-user")
   comments Comment[] @relation("comment-user")
