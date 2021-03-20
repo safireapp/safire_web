@@ -30,6 +30,7 @@ const Login: React.FC = () => {
   async function handleLogin(data: LoginData) {
     try {
       setLoading(true);
+      console.log(data)
 
       const { data: user } = await axios.post<User>("/api/login", data);
 
@@ -45,7 +46,8 @@ const Login: React.FC = () => {
       });
     } catch (err) {
       setLoading(false);
-      setErrors(err.response.data);
+      console.error(err)
+      // setErrors(err.response.data);
     }
   }
 
@@ -68,7 +70,7 @@ const Login: React.FC = () => {
           pos="relative"
           flexDir={["column-reverse", "column-reverse", "row"]}
           boxShadow="2xl"
-          h="80vh"
+          h="85vh"
           w="80vw"
           m="8"
           borderRadius="2xl"
@@ -104,7 +106,7 @@ const Login: React.FC = () => {
                   variant="outline"
                   type="password"
                   placeholder="Password"
-                  name="email"
+                  name="password"
                   ref={register}
                   isInvalid={errors?.password ? true : false}
                   errorBorderColor="crimson"
