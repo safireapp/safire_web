@@ -35,7 +35,7 @@ const Signup: React.FC = () => {
   const toast = useToast();
   const router = useRouter();
 
-  const { mutateUser } = useUser("/", false);
+  const { mutateUser } = useUser("/", true);
 
   async function handleLogin(e: React.SyntheticEvent) {
     try {
@@ -188,20 +188,6 @@ const Signup: React.FC = () => {
               >
                 Signup
               </Button>
-
-              <Accordion allowToggle>
-                <AccordionItem>
-                  <AccordionButton>
-                    <AccordionIcon />
-                    Info
-                  </AccordionButton>
-                  <AccordionPanel>
-                    If you don't feel like sharing your first name and last
-                    name, it's ok! Not required anyways!
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-
               <Center>
                 <Text pos="absolute" bottom="3" fontSize={["sm", "md", "md"]}>
                   Already have an account? <Link href="/login">Login</Link>

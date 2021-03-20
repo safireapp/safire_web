@@ -15,8 +15,8 @@ import Link from "next/link";
 import { useUser } from "hooks";
 import { Error } from "@utils/types";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import fetcher from "@lib/fetcher";
+import axios from "axios";
+import { User } from ".prisma/client";
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,7 +24,6 @@ const Login: React.FC = () => {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const toast = useToast();
-  const router = useRouter();
 
   const { mutateUser } = useUser("/", true);
 
@@ -32,17 +31,13 @@ const Login: React.FC = () => {
     try {
       e.preventDefault();
       setLoading(true);
-      const user = await mutateUser(
-        fetcher("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          data: {
-            email: email.current.value,
-            password: password.current.value,
-          },
-        })
-      );
 
+      const { data: user } = await axios.post<User>("/api/login", {
+        email: email.current.value,
+        password: password.current.value,
+      });
+
+      await mutateUser(user);
       setLoading(false);
       setErrors(null);
       toast({
@@ -52,12 +47,9 @@ const Login: React.FC = () => {
         variant: "subtle",
         duration: 2000,
       });
-      router.push("/");
     } catch (err) {
       setLoading(false);
-      console.log(err);
-      const data = err.response.data;
-      setErrors(data);
+      setErrors(err.response.data);
     }
   }
 
