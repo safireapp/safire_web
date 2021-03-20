@@ -8,47 +8,30 @@ import {
   Image,
   Input,
   Text,
-  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useUser } from "hooks";
 import { Error, SignupData } from "@utils/types";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import fetcher from "@lib/fetcher";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Error>(null);
+  const [alert, setAlert] = useState<string>(null);
   const { register, handleSubmit } = useForm();
-  const toast = useToast();
-  const router = useRouter();
 
   const { mutateUser } = useUser("/", true);
 
   async function handleSignup(data: SignupData) {
     try {
       setLoading(true);
-      const user = await mutateUser(
-        fetcher("/api/signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          data,
-        })
-      );
-
+      const res = await axios.post("/api/signup", data);
+      setAlert(res.data.message)
       setLoading(false);
       setErrors(null);
-      toast({
-        title: "Signed up successfully",
-        description: `Welcome to Safire, ${user.username}!`,
-        status: "success",
-        variant: "subtle",
-        duration: 2000,
-      });
-      router.push("/");
     } catch (err) {
       setLoading(false);
       setErrors(err.response.data);
@@ -97,7 +80,7 @@ const Signup: React.FC = () => {
                     errors.confirmPassword}
                 </Alert>
               )}
-              <Box display={["box", "flex", "flex"]}>
+              <Box display={["box", "flex", "flex"]} my="3">
                 <FormControl id="firstname" mr="3" mb={["3", "0", "0"]}>
                   <Input
                     variant="outline"
@@ -175,6 +158,10 @@ const Signup: React.FC = () => {
               >
                 Signup
               </Button>
+              {alert && <Alert status="info">
+                <AlertIcon />
+                {alert}
+              </Alert>}
               <Center>
                 <Text pos="absolute" bottom="3" fontSize={["sm", "md", "md"]}>
                   Already have an account? <Link href="/login">Login</Link>
