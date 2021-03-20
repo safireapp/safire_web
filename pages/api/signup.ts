@@ -27,8 +27,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       confirmPassword,
     };
     const { valid, errors } = validateSignupData(newUser);
+    const userAlreadyExists = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            email
+          },
+          {
+            username
+          }
+        ]
+      }
+    })
 
     if (!valid) return res.status(400).json(errors);
+    if (userAlreadyExists) return res.status(400).json({ message: "User with this username/email already exists" })
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -76,6 +89,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "User already exists" });
+    return res.status(500).json({ message: "An unexpected error occurred" });
   }
 };
