@@ -10,32 +10,28 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useUser } from "hooks";
-import { Error } from "@utils/types";
+import { Error, LoginData } from "@utils/types";
 import Head from "next/head";
 import axios from "axios";
 import { User } from ".prisma/client";
+import { useForm } from "react-hook-form";
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Error>(null);
-  const email = useRef<HTMLInputElement>(null);
-  const password = useRef<HTMLInputElement>(null);
   const toast = useToast();
+  const { register, handleSubmit } = useForm();
 
   const { mutateUser } = useUser("/", true);
 
-  async function handleLogin(e: React.SyntheticEvent) {
+  async function handleLogin(data: LoginData) {
     try {
-      e.preventDefault();
       setLoading(true);
 
-      const { data: user } = await axios.post<User>("/api/login", {
-        email: email.current.value,
-        password: password.current.value,
-      });
+      const { data: user } = await axios.post<User>("/api/login", data);
 
       await mutateUser(user);
       setLoading(false);
@@ -83,7 +79,7 @@ const Login: React.FC = () => {
             justifyContent="center"
             flex="1 0 0"
           >
-            <Box as="form" w="80%" onSubmit={handleLogin}>
+            <Box as="form" w="80%" onSubmit={handleSubmit(handleLogin)}>
               <Text fontSize="3xl">Welcome back</Text>
               {errors && (
                 <Alert status="error">
@@ -96,7 +92,8 @@ const Login: React.FC = () => {
                   variant="outline"
                   placeholder="Enter your email"
                   type="email"
-                  ref={email}
+                  name="email"
+                  ref={register}
                   isInvalid={errors?.email ? true : false}
                   errorBorderColor="crimson"
                   required
@@ -107,7 +104,8 @@ const Login: React.FC = () => {
                   variant="outline"
                   type="password"
                   placeholder="Password"
-                  ref={password}
+                  name="email"
+                  ref={register}
                   isInvalid={errors?.password ? true : false}
                   errorBorderColor="crimson"
                   required
