@@ -71,7 +71,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    return res.json({ message: "Signup success. Please confirm your email." });
+    return res.json({
+      message: "Signup success! Please check your inbox to confirm your email.",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "User already exists" });

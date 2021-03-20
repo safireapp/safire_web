@@ -7,13 +7,20 @@ import { Session } from "next-iron-session";
 import withSession from "@lib/session";
 import prisma from "@lib/prisma";
 
+type Token = {
+  firstName?: string
+  lastName?: string
+  username: string
+  email: string
+}
+
 export default withSession(
   async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     const token: string = req.query.emailToken as string;
     try {
-      const user: User = jwt.verify(token, process.env.EMAIL_SECRET) as User;
-      await prisma.user.update({
-        where: { id: user.id },
+      const userToken: Token = jwt.verify(token, process.env.EMAIL_SECRET) as Token;
+      const user = await prisma.user.update({
+        where: { username: userToken.username },
         data: { confirmed: true },
       });
 
