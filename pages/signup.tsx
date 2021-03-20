@@ -29,7 +29,7 @@ const Signup: React.FC = () => {
     try {
       setLoading(true);
       const res = await axios.post("/api/signup", data);
-      setAlert(res.data.message)
+      setAlert(res.data.message);
       setLoading(false);
       setErrors(null);
     } catch (err) {
@@ -73,11 +73,12 @@ const Signup: React.FC = () => {
               {errors && (
                 <Alert status="error">
                   <AlertIcon />
-                  {errors.message ||
-                    errors.username ||
-                    errors.email ||
-                    errors.password ||
-                    errors.confirmPassword}
+                  {Object.values(errors).map((error) => (
+                    <React.Fragment key={error}>
+                      {error}
+                      <br />
+                    </React.Fragment>
+                  ))}
                 </Alert>
               )}
               <Box display={["box", "flex", "flex"]} my="3">
@@ -158,10 +159,12 @@ const Signup: React.FC = () => {
               >
                 Signup
               </Button>
-              {alert && <Alert status="info">
-                <AlertIcon />
-                {alert}
-              </Alert>}
+              {alert && (
+                <Alert status="info">
+                  <AlertIcon />
+                  {alert}
+                </Alert>
+              )}
               <Center>
                 <Text pos="absolute" bottom="3" fontSize={["sm", "md", "md"]}>
                   Already have an account? <Link href="/login">Login</Link>

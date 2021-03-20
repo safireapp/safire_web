@@ -30,7 +30,6 @@ const Login: React.FC = () => {
   async function handleLogin(data: LoginData) {
     try {
       setLoading(true);
-      console.log(data)
 
       const { data: user } = await axios.post<User>("/api/login", data);
 
@@ -46,8 +45,7 @@ const Login: React.FC = () => {
       });
     } catch (err) {
       setLoading(false);
-      console.error(err)
-      // setErrors(err.response.data);
+      setErrors(err.response.data);
     }
   }
 
@@ -86,7 +84,12 @@ const Login: React.FC = () => {
               {errors && (
                 <Alert status="error">
                   <AlertIcon />
-                  {errors.message || errors.email || errors.password}
+                  {Object.values(errors).map((error) => (
+                    <React.Fragment key={error}>
+                      {error}
+                      <br />
+                    </React.Fragment>
+                  ))}
                 </Alert>
               )}
               <FormControl id="email" my="3">
