@@ -8,24 +8,24 @@ generator client {
 }
 
 model User {
-  id         String    @unique @default(uuid())
-  email      String    @unique @db.Citext
-  username   String    @unique @db.Citext
-  password   String
-  firstName  String?   @default("")
-  lastName   String?   @default("")
-  bio        String?   @default("")
-  website    String?   @default("")
-  location   String?   @default("")
-  imageUrl   String?   @default("https://firebasestorage.googleapis.com/v0/b/safire-e142f.appspot.com/o/blankpfp.webp?alt=media") // TODO
-  bannerImg  String?   @default("https://bit.ly/3tk0bbr")
-  created_at DateTime  @default(now()) @map("created_at")
-  role       UserRole? @default(USER)
-  confirmed  Boolean   @default(false)
-  verified   Boolean   @default(false)
-  following  String[]
-  public_key   String @default("")
-  enc_priv_key String @default("")
+  id           String    @unique @default(uuid())
+  email        String    @unique @db.Citext
+  username     String    @unique @db.Citext
+  password     String
+  firstName    String?   @default("")
+  lastName     String?   @default("")
+  bio          String?   @default("")
+  website      String?   @default("")
+  location     String?   @default("")
+  imageUrl     String?   @default("https://firebasestorage.googleapis.com/v0/b/safire-e142f.appspot.com/o/blankpfp.webp?alt=media") // TODO
+  bannerImg    String?   @default("https://bit.ly/3tk0bbr")
+  created_at   DateTime  @default(now()) @map("created_at")
+  role         UserRole? @default(USER)
+  confirmed    Boolean   @default(false)
+  verified     Boolean   @default(false)
+  following    String[]
+  public_key   String    @default("")
+  enc_priv_key String    @default("")
 
   posts    Post[]    @relation("post-user")
   comments Comment[] @relation("comment-user")

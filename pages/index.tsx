@@ -15,6 +15,9 @@ const Home: React.FC = () => {
         <title>Safire</title>
       </Head>
       <h1>Hello World</h1>
+      <h2>
+        <a href="http://localhost:3000/keys">Create your keys!!</a>
+      </h2>
     </div>
   );
 };

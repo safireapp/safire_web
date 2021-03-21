@@ -36,7 +36,7 @@ export default withSession(
       return res.json(user);
     } catch (error) {
       console.error(error);
-      return res.status(540400).json(error.message);
+      return res.status(500).json({ message: error.message});
     }
   }
 );

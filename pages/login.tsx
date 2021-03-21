@@ -18,24 +18,23 @@ import Head from "next/head";
 import axios from "axios";
 import { User } from ".prisma/client";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Error>(null);
   const toast = useToast();
   const { register, handleSubmit } = useForm();
-
+  const router = useRouter();
   const { mutateUser } = useUser("/", true);
 
   async function handleLogin(data: LoginData) {
     try {
       setLoading(true);
-
       const { data: user } = await axios.post<User>("/api/login", data);
-
-      await mutateUser(user);
       setLoading(false);
       setErrors(null);
+      await mutateUser(user);
       toast({
         title: "Logged in successfully",
         description: `Welcome back, ${user.username}!`,
@@ -55,7 +54,7 @@ const Login: React.FC = () => {
         <title>Login</title>
       </Head>
       <Box
-        className="login-page"
+        className="form-page"
         display="flex"
         alignItems="center"
         justifyContent="center"

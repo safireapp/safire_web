@@ -44,7 +44,7 @@ const Signup: React.FC = () => {
         <title>Signup on Safire</title>
       </Head>
       <Box
-        className="login-page"
+        className="form-page"
         display="flex"
         alignItems="center"
         justifyContent="center"
